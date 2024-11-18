@@ -3,6 +3,8 @@ package ParkingLot;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class BookedData {
@@ -20,7 +22,7 @@ public class BookedData {
     
     // Checks Spaces if Booked
     public boolean checkSpace(int index){
-        if(status.get(index).equals("Booked"))
+        if(status.get(index).equals("Parked"))
             return true;
         else
             return false;
@@ -53,5 +55,24 @@ public class BookedData {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    // Retrieve Date and Time
+    public String RetrieveDateTime(String option){
+        // Get the current date and time
+        LocalDateTime now = LocalDateTime.now();
+        // Define the format
+        DateTimeFormatter formatter;
+        // Format the current date and time
+        String formattedDateTime;
+        
+        if(option == "Both")
+            formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
+        else if(option == "Date")
+            formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        else
+            formatter = DateTimeFormatter.ofPattern("HH:mm");
+        formattedDateTime = now.format(formatter);
+        return (formattedDateTime);
     }
 }

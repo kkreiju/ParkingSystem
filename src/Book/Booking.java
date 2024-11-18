@@ -1,4 +1,5 @@
 package Book;
+import ParkingLot.BookedData;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneOffset;
@@ -233,11 +234,18 @@ public class Booking extends javax.swing.JFrame {
     }//GEN-LAST:event_toMinuteKeyPressed
 
     private void confirmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmMouseClicked
-        // Checks name is valid
         float starthour = Float.parseFloat(fromHour.getText());
         float startminute = Float.parseFloat(fromMinute.getText()) * 0.01f; // Convert minutes to decimals
         float endhour = Float.parseFloat(toHour.getText());
         float endminute = Float.parseFloat(toMinute.getText()) * 0.01f; // Convert minutes to decimals
+        
+        // Retrive Current Time
+        BookedData bd = new BookedData();
+        float currenthour = Float.parseFloat(bd.RetrieveDateTime("Time").split(":")[0]);
+        float currentminute = Float.parseFloat(bd.RetrieveDateTime("Time").split(":")[1]) * 0.01f; // Convert minutes to decimals
+        float currenttime = currenthour + currentminute;
+        
+        // Checks name is valid
         if(!name.getText().trim().isEmpty()){
             customername = name.getText();
         }
@@ -249,6 +257,8 @@ public class Booking extends javax.swing.JFrame {
         // Checks time if valid
         float start = starthour + startminute;
         float end = endhour + endminute;
+
+        // Convertion of AM/PM to Float which adds 12 to make it as 24HR format
         if(fromComboBox.getSelectedIndex() == 1)
             start += 12;
         if(toComboBox.getSelectedIndex() == 1)
@@ -257,8 +267,19 @@ public class Booking extends javax.swing.JFrame {
         if(fromComboBox.getSelectedIndex() == 0 && starthour == 12)
             start = 0.00f + startminute;
         
+        // If end time is less than start time
         if(end < start){
             JOptionPane.showMessageDialog(this, "Not a valid time", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // If start time and end time is the same
+        if(end == start){
+            JOptionPane.showMessageDialog(this, "Not a valid time, you cannot park for a second.", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        // If time has passed
+        else if(start < currenttime){
+            JOptionPane.showMessageDialog(this, "Not a valid time, time has passed.", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
         
@@ -268,13 +289,28 @@ public class Booking extends javax.swing.JFrame {
 
         // Checks if space is valid
         String space = spaceNumber.getSelectedItem().toString();
-        spacenumber = Integer.parseInt(space.split(" ")[1]);
+        this.spacenumber = Integer.parseInt(space.split(" ")[1]);
         
         // Checks Vehicle Type
-        vehicletype = vehicleType.getText();
+        this.vehicletype = vehicleType.getText();
 
         // Initialize GarageData.txt as array
         File file = new File(System.getProperty("user.dir") + "/src/Data/GarageData.txt");
+        
+        /*
+            WILL CHANGE THE LOGIC TO:
+        
+            Initialize Data/ParkingHistory.txt as array
+            Read Information: Date, From, To, Space Number, and In the Space
+            Read Space Number and verify if someone is in the Space
+            
+            IF SOMEONE IS NOT IN THE SPACE (FREE): (this is to double check if someone is booking for a time)
+            Must Match The Date or else disregard
+            Must not overlap From and To
+            
+            ELSE:
+            Confirm Booking (code below)
+        */
 
         // Check if space is available when line is read as "Free"
         // If available, write to GarageData.txt as "Booked"

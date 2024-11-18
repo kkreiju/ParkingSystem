@@ -1,25 +1,28 @@
 package Menu;
 import ParkingLot.Garage1;
+import ParkingLot.BookedData;
 import Book.SelectVehicle;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class Menu extends javax.swing.JFrame {
 
     public Menu() {
         setUndecorated(true);
         initComponents();
-        // Get the current date and time
-        LocalDateTime now = LocalDateTime.now();
         
-        // Define the format
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
+        BookedData bd = new BookedData();
+        System.out.println(bd.RetrieveDateTime("Both"));
         
-        // Format the current date and time
-        String formattedDateTime = now.format(formatter);
+        /*
+            Initialize Data/ParkingHistory.txt as array
+            Check Parking Dates
+            Disregard any Date that is not the current date
+            Read Information: Date, From, To, Space Number, and In the Space
         
-        // Print the formatted date and time
-        System.out.println("Current date and time: " + formattedDateTime);
+            IF DATABASE TIME(From, To) IS IN LINE WITH CURRENT TIME:
+            Mark In the Space as true (this is to ensure that in booking, you cannot book the space)
+            ELSE:
+            Mark In the Space as false (this is to ensure that it is an updated booking)
+        */
     }
 
     @SuppressWarnings("unchecked")

@@ -141,7 +141,8 @@ public class BookingPayment extends javax.swing.JFrame {
                         + "To: " + endtimedata + "\n"
                         + "Space Number: " + spacenumber.getText() + "\n"
                         + "Total Price: " + totalprice + "\n"
-                        + "Payment Status: Paid\n";
+                        + "Payment Status: Paid\n"
+                        + "In the Space: false";
             try {
                 FileWriter fw = new FileWriter(System.getProperty("user.dir") + "/src/Data/ParkingHistory.txt", true);
                 fw.write(data + "\n"); // Add a new line after the text
