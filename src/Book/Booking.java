@@ -23,6 +23,28 @@ public class Booking extends javax.swing.JFrame {
     // Adjust Price
     int carFeePerHour = 20;
     int motorFeePerHour = 10;
+    
+    // Retrive Current Time
+    BookedData bd = new BookedData();
+    float currenthour = Float.parseFloat(bd.RetrieveDateTime("Time").split(":")[0]);
+    float currentminute = Float.parseFloat(bd.RetrieveDateTime("Time").split(":")[1]) * 0.01f; // Convert minutes to decimals
+    float currenttime = currenthour + currentminute;
+    String currentdate = bd.RetrieveDateTime("Date");
+    
+    // Initialize Booking Times
+    float starthour ;
+    float startminute; 
+    float endhour;
+    float endminute; 
+    
+    // Function Call for Booking Time
+    
+    public void initializeBookingTimeValue(){
+        this.starthour = Float.parseFloat(fromHour.getText());
+        this.startminute = Float.parseFloat(fromMinute.getText()) * 0.01f; // Convert minutes to decimals
+        this.endhour = Float.parseFloat(toHour.getText());
+        this.endminute = Float.parseFloat(toMinute.getText()) * 0.01f; // Convert minutes to decimals
+    }
 
     public Booking() {
         setUndecorated(true);
@@ -234,16 +256,7 @@ public class Booking extends javax.swing.JFrame {
     }//GEN-LAST:event_toMinuteKeyPressed
 
     private void confirmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmMouseClicked
-        float starthour = Float.parseFloat(fromHour.getText());
-        float startminute = Float.parseFloat(fromMinute.getText()) * 0.01f; // Convert minutes to decimals
-        float endhour = Float.parseFloat(toHour.getText());
-        float endminute = Float.parseFloat(toMinute.getText()) * 0.01f; // Convert minutes to decimals
-        
-        // Retrive Current Time
-        BookedData bd = new BookedData();
-        float currenthour = Float.parseFloat(bd.RetrieveDateTime("Time").split(":")[0]);
-        float currentminute = Float.parseFloat(bd.RetrieveDateTime("Time").split(":")[1]) * 0.01f; // Convert minutes to decimals
-        float currenttime = currenthour + currentminute;
+        initializeBookingTimeValue();
         
         // Checks name is valid
         if(!name.getText().trim().isEmpty()){
@@ -255,8 +268,8 @@ public class Booking extends javax.swing.JFrame {
         }
         
         // Checks time if valid
-        float start = starthour + startminute;
-        float end = endhour + endminute;
+        float start = this.starthour + this.startminute;
+        float end = this.endhour + this.endminute;
 
         // Convertion of AM/PM to Float which adds 12 to make it as 24HR format
         if(fromComboBox.getSelectedIndex() == 1)
@@ -264,8 +277,8 @@ public class Booking extends javax.swing.JFrame {
         if(toComboBox.getSelectedIndex() == 1)
             end += 12;
         // Checks time is 12 AM
-        if(fromComboBox.getSelectedIndex() == 0 && starthour == 12)
-            start = 0.00f + startminute;
+        if(fromComboBox.getSelectedIndex() == 0 && this.starthour == 12)
+            start = 0.00f + this.startminute;
         
         // If end time is less than start time
         if(end < start){
@@ -311,28 +324,63 @@ public class Booking extends javax.swing.JFrame {
             ELSE:
             Confirm Booking (code below)
         */
-
-        // Check if space is available when line is read as "Free"
-        // If available, write to GarageData.txt as "Booked"
-        boolean spaceAvailable = false;
-        int targetLine = spacenumber;
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+        
+        // Make all values null to initialize in conditional statements where they cannot access the value
+        String historyDate = null;
+        String historyStartTime = null;
+        String historyEndTime = null;
+        String historySpaceNumber = null;
+        String historyParked = null;
+        
+        boolean spaceAvailable = true;
+        
+        String historyFilePath = System.getProperty("user.dir") + "/src/Data/ParkingHistory.txt";
+        try (BufferedReader br = new BufferedReader(new FileReader(historyFilePath))) {
             String line;
-            // currentLine is based on .txt file length
-            for(int currentLine = 0; currentLine < 46; currentLine++){
-                line = reader.readLine();
-                if(currentLine == targetLine + 1 && line.trim().equals("Free")){
-                    spaceAvailable = true;
-                    JOptionPane.showMessageDialog(this, "Please proceed to payment for the confirmation of booking.", "Success", JOptionPane.INFORMATION_MESSAGE);
+            int lineNumber = 1;
+            boolean vehicleParkedinSpace = false;
+            
+            while((line = br.readLine()) != null){
+                // Initialize Values
+                switch(lineNumber){
+                    case 2:
+                        historyDate = line.split(":")[1].trim();
+                        break;
+                    case 3:
+                        historyStartTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
+                        break;
+                    case 4:
+                        historyEndTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
+                        break;
+                    case 5:
+                        historySpaceNumber = line.split(":")[1].trim();
+                        break;
+                    case 8:
+                        historyParked = line.split(":")[1].trim();
+                        break;
+                    case 9:
+                        lineNumber = 0;
                 }
+                
+                if(lineNumber == 0)
+                    vehicleParkedinSpace = checkHistory(historyDate, historyStartTime, historyEndTime, historySpaceNumber, historyParked);
+                
+                if(vehicleParkedinSpace){
+                    spaceAvailable = false;
+                    break;
+                }
+
+                lineNumber++;
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         
+
         // Else, prompt user that space is not available
         if (spaceAvailable) {
+            JOptionPane.showMessageDialog(this, "Please proceed to payment for the confirmation of booking.", "Success", JOptionPane.INFORMATION_MESSAGE);
+
             BookingPayment bp = new BookingPayment();
             
             //Initialize Datas from this class
@@ -348,7 +396,7 @@ public class Booking extends javax.swing.JFrame {
             bp.setVisible(true);
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "Space " + targetLine + " is not available");
+            JOptionPane.showMessageDialog(this, "Space " + this.spacenumber + " is not available");
         }
     }//GEN-LAST:event_confirmMouseClicked
 
@@ -457,10 +505,7 @@ public class Booking extends javax.swing.JFrame {
     
     public void price(String vehicletype){
         int perhour;
-        float starthour = Float.parseFloat(fromHour.getText());
-        float startminute = Float.parseFloat(fromMinute.getText()) * 0.01f; // Convert minutes to decimals
-        float endhour = Float.parseFloat(toHour.getText());
-        float endminute = Float.parseFloat(toMinute.getText()) * 0.01f; // Convert minutes to decimals
+        initializeBookingTimeValue();
         
         if(vehicletype.equals("Car"))
             perhour = carFeePerHour;
@@ -468,15 +513,15 @@ public class Booking extends javax.swing.JFrame {
             perhour = motorFeePerHour;
         
         // Checks time if valid
-        float start = starthour + startminute;
-        float end = endhour + endminute;
-        if(fromComboBox.getSelectedIndex() == 1)
+        float start = this.starthour + this.startminute;
+        float end = this.endhour + this.endminute;
+        if(fromComboBox.getSelectedIndex() == 1 && !(start >= 12 && start < 13)) // Checks time if is not 12PM
             start += 12;
         if(toComboBox.getSelectedIndex() == 1)
             end += 12;
         // Checks time is 12 AM
-        if(fromComboBox.getSelectedIndex() == 0 && starthour == 12)
-            start = 0.00f + startminute;
+        if(fromComboBox.getSelectedIndex() == 0 && this.starthour == 12)
+            start = 0.00f + this.startminute;
         
         if(end < start){
             JOptionPane.showMessageDialog(this, "Not a valid time", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -494,11 +539,60 @@ public class Booking extends javax.swing.JFrame {
         if((int) end - (int) start == 0)
             price = perhour;
         
-        System.out.println("START: " + (int) start);
-        System.out.println("END: " + (int) end);
-        System.out.println("FORMULA: " + ((int) end - (int) start));
-        System.out.println("PER HOUR: " + perhour +"\n");
+        // TESTING PURPOSES
+//        System.out.println("START: " + (int) start);
+//        System.out.println("END: " + (int) end);
+//        System.out.println("FORMULA: " + ((int) end - (int) start));
+//        System.out.println("PER HOUR: " + perhour +"\n");
+
         total.setText(price + ".00 PHP");
+    }
+    
+    private boolean checkHistory(String date, String startTime, String endTime, String spaceNumber, String parked){
+        int historySpaceNumber = Integer.parseInt(spaceNumber);
+        initializeBookingTimeValue();
+        float historyStartTime = twentyFourHourFormat(startTime);
+        float historyEndTime = twentyFourHourFormat(endTime);
+        
+        // Checks time if valid
+        float bookingStartTime = this.starthour + this.startminute;
+        float bookingEndTime = this.endhour + this.endminute;
+        if(fromComboBox.getSelectedIndex() == 1 && !(bookingStartTime >= 12 && bookingStartTime < 13)) // Checks time if is not 12PM
+            bookingStartTime += 12;
+        if(toComboBox.getSelectedIndex() == 1)
+            bookingEndTime += 12;
+        // Checks time is 12 AM
+        if(fromComboBox.getSelectedIndex() == 0 && this.starthour == 12)
+            bookingStartTime = 0.00f + this.startminute;
+        
+        if(historySpaceNumber == spacenumber 
+                && date.equals(currentdate)
+                && historyStartTime < bookingEndTime && historyEndTime > bookingStartTime // Making sure there is no conflict with time
+                && parked.equals("true")){
+            System.out.println("CHECK HISTORY TRUE");
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    
+    public float twentyFourHourFormat(String twelveHourFormat){
+        String hour = twelveHourFormat.split(":")[0].trim();
+        String minute = twelveHourFormat.split(":")[1].split(" ")[0].trim();
+        String amPm = twelveHourFormat.split(" ")[1].trim();
+        float time = Float.parseFloat(hour);
+        
+        if(amPm.equals("PM") && time == 12){
+            time = 12;
+        }
+        else if(amPm.equals("PM") && time != 12){
+            time += 12;
+        }
+
+        time += Float.parseFloat(minute) * 0.01f;
+        
+        return time;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

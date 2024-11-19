@@ -1,6 +1,6 @@
 SPACE //Line 2-21
 
-Free
+Booked
 Free
 Free
 Free
@@ -23,7 +23,7 @@ Free
 
 Vehicle Type //Line 25-44
 
-Free
+Car
 Free
 Free
 Free
