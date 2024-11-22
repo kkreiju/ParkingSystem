@@ -5,14 +5,18 @@ To: 11:30 AM
 Space Number: 7
 Total Price: 10
 Payment Status: Paid
-In the Space: true
+In the Space: false
+Vehicle Type: Motorcycle
+Left Early: true
 ---------------------
 Name: Jie
-Date: 11/19/2024
-From: 11:00 PM
-To: 11:59 PM
-Space Number: 1
+Date: 11/22/2024
+From: 12:24 PM
+To: 2:59 PM
+Space Number: 5
 Total Price: 20
 Payment Status: Paid
-In the Space: false
+In the Space: true
+Vehicle Type: Car
+Left Early: true
 ---------------------

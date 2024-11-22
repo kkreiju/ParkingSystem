@@ -5,7 +5,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.ZoneOffset;
 import java.awt.event.KeyEvent;
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -306,24 +305,6 @@ public class Booking extends javax.swing.JFrame {
         
         // Checks Vehicle Type
         this.vehicletype = vehicleType.getText();
-
-        // Initialize GarageData.txt as array
-        File file = new File(System.getProperty("user.dir") + "/src/Data/GarageData.txt");
-        
-        /*
-            WILL CHANGE THE LOGIC TO:
-        
-            Initialize Data/ParkingHistory.txt as array
-            Read Information: Date, From, To, Space Number, and In the Space
-            Read Space Number and verify if someone is in the Space
-            
-            IF SOMEONE IS NOT IN THE SPACE (FREE): (this is to double check if someone is booking for a time)
-            Must Match The Date or else disregard
-            Must not overlap From and To
-            
-            ELSE:
-            Confirm Booking (code below)
-        */
         
         // Make all values null to initialize in conditional statements where they cannot access the value
         String historyDate = null;
@@ -358,7 +339,7 @@ public class Booking extends javax.swing.JFrame {
                     case 8:
                         historyParked = line.split(":")[1].trim();
                         break;
-                    case 9:
+                    case 10:
                         lineNumber = 0;
                 }
                 

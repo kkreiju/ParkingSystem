@@ -1,5 +1,7 @@
 package Menu;
 
+import Leave.SelectSpace;
+
 public class Menu2 extends javax.swing.JFrame {
 
     public Menu2() {
@@ -11,7 +13,7 @@ public class Menu2 extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        leaveAndPay = new javax.swing.JLabel();
+        leave = new javax.swing.JLabel();
         viewParkingHistory = new javax.swing.JLabel();
         back = new javax.swing.JLabel();
         background = new javax.swing.JLabel();
@@ -22,7 +24,13 @@ public class Menu2 extends javax.swing.JFrame {
         setMaximumSize(new java.awt.Dimension(1024, 600));
         setSize(new java.awt.Dimension(1024, 600));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-        getContentPane().add(leaveAndPay, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 190, 300, 80));
+
+        leave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                leaveMouseClicked(evt);
+            }
+        });
+        getContentPane().add(leave, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 190, 300, 80));
         getContentPane().add(viewParkingHistory, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 300, 80));
 
         back.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -46,10 +54,18 @@ public class Menu2 extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_backMouseClicked
 
+    private void leaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_leaveMouseClicked
+        SelectSpace ss = new SelectSpace();
+        ss.setLocationRelativeTo(null);
+        ss.setResizable(false);
+        ss.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_leaveMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel back;
     private javax.swing.JLabel background;
-    private javax.swing.JLabel leaveAndPay;
+    private javax.swing.JLabel leave;
     private javax.swing.JLabel viewParkingHistory;
     // End of variables declaration//GEN-END:variables
 }

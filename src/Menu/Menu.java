@@ -3,21 +3,19 @@ import Book.Booking;
 import ParkingLot.Garage1;
 import ParkingLot.BookedData;
 import Book.SelectVehicle;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.util.*;
 
 public class Menu extends javax.swing.JFrame {
     BookedData bd = new BookedData();
     Booking b = new Booking();
     String currentdate = bd.RetrieveDateTime("Date");
-    float currenttime = b.twentyFourHourFormat(bd.RetrieveDateTime("Time"));
+    float currenttime = Float.parseFloat(bd.RetrieveDateTime("Time").split(":")[0].trim()) 
+            + (Float.parseFloat(bd.RetrieveDateTime("Time").split(":")[1].trim()) * 0.01f);
     
     public Menu() {
         setUndecorated(true);
         initComponents();
-        
-        System.out.println(bd.RetrieveDateTime("Both"));
         
         /*
             Initialize Data/ParkingHistory.txt as array
@@ -31,46 +29,42 @@ public class Menu extends javax.swing.JFrame {
             Mark In the Space as false (this is to ensure that it is an updated booking)
         */
         
-        // Make all values null to initialize in conditional statements where they cannot access the value
-        String historyDate = null;
-        String historyStartTime = null;
-        String historyEndTime = null;
-        String historySpaceNumber = null;
-        
         String historyFilePath = System.getProperty("user.dir") + "/src/Data/ParkingHistory.txt";
-        try (BufferedReader br = new BufferedReader(new FileReader(historyFilePath))) {
-            String line;
-            int lineNumber = 1;
-            boolean vehicleParkedinSpace = false;
-            
-            while((line = br.readLine()) != null){
-                // Initialize Values
-                switch(lineNumber){
-                    case 2:
-                        historyDate = line.split(":")[1].trim();
-                        break;
-                    case 3:
-                        historyStartTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
-                        break;
-                    case 4:
-                        historyEndTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
-                        break;
-                    case 5:
-                        historySpaceNumber = line.split(":")[1].trim();
-                        break;
-                    case 9:
-                        lineNumber = 0;
-                }
-                
-                if(lineNumber == 0)
-                    vehicleParkedinSpace = isParked(historyDate, historyStartTime, historyEndTime);
-                
-                if(vehicleParkedinSpace){
-                    // Write Data Is in Space: true
-                }
 
-                lineNumber++;
+        try (BufferedReader br = new BufferedReader(new FileReader(historyFilePath))) {
+            List<String> fileLines = new ArrayList<>();
+            String line;
+            String historyDate = null, historyStartTime = null, historyEndTime = null, historySpaceNumber = null;
+            boolean vehicleParkedInSpace = false;
+
+            while ((line = br.readLine()) != null) {
+                fileLines.add(line); // Save the line for future rewrite
+
+                if (line.startsWith("Date:")) {
+                    historyDate = line.split(":")[1].trim();
+                } else if (line.startsWith("From:")) {
+                    historyStartTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
+                } else if (line.startsWith("To:")) {
+                    historyEndTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
+                } else if (line.startsWith("Space Number:")) {
+                    historySpaceNumber = line.split(":")[1].trim();
+                } else if (line.startsWith("In the Space:")) {
+                    vehicleParkedInSpace = isParked(historyDate, historyStartTime, historyEndTime);
+
+                    // Update the "In the Space" value
+                    String updatedLine = "In the Space: " + (vehicleParkedInSpace ? "true" : "false"); // ternary operator
+                    fileLines.set(fileLines.size() - 1, updatedLine);
+                }
             }
+
+            // Write back to file
+            try (BufferedWriter bw = new BufferedWriter(new FileWriter(historyFilePath))) {
+                for (String fileLine : fileLines) {
+                    bw.write(fileLine);
+                    bw.newLine();
+                }
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -82,7 +76,7 @@ public class Menu extends javax.swing.JFrame {
         float dataStartTime = b.twentyFourHourFormat(startTime);
         float dataEndTime = b.twentyFourHourFormat(endTime);
         
-        if(date == this.currentdate && currenttime >= dataStartTime && currenttime <= dataEndTime)
+        if(date.equals(this.currentdate) && this.currenttime >= dataStartTime && this.currenttime <= dataEndTime)
             return true;
         else
             return false;
