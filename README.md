@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center"> Parking System </h1>
-<p align="center"><i >Updated as of November 14, 2024.</i></p><br>
+<p align="center"><i >Updated as of November 26, 2024.</i></p><br>
 A Java-based application designed to manage parking bookings, payments, and real-time parking lot status. It features modules for booking and payment, real-time parking lot monitoring, vehicle departure, and parking history tracking. This system ensures efficient and user-friendly parking management.
 
 ## Tech Stack
