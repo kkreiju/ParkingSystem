@@ -142,7 +142,7 @@ public class BookingPayment extends javax.swing.JFrame {
                         + "Payment Status: Paid\n"
                         + "In the Space: false\n"
                         + "Vehicle Type: " + vehicletype.getText() + "\n"
-                        + "Left Early: false"
+                        + "Left Early: false\n"
                         + "---------------------";
             try {
                 FileWriter fw = new FileWriter(System.getProperty("user.dir") + "/src/Data/ParkingHistory.txt", true);

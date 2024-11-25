@@ -409,10 +409,10 @@ public class Booking extends javax.swing.JFrame {
             price = perhour;
         
         // TESTING PURPOSES
-        System.out.println("START: " + (int) start);
-        System.out.println("END: " + (int) end);
-        System.out.println("FORMULA: " + ((int) end - (int) start));
-        System.out.println("PER HOUR: " + perhour +"\n");
+//        System.out.println("START: " + (int) start);
+//        System.out.println("END: " + (int) end);
+//        System.out.println("FORMULA: " + ((int) end - (int) start));
+//        System.out.println("PER HOUR: " + perhour +"\n");
 
         total.setText(price + ".00 PHP");
     }
