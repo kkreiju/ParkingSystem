@@ -2,6 +2,7 @@ package ParkingLot;
 import Data.ResourcesRendering;
 import Menu.Menu;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
 public class Garage2 extends javax.swing.JFrame {
@@ -26,6 +27,9 @@ public class Garage2 extends javax.swing.JFrame {
             else if(bd.checkSpace(i) && vehicletype == "Motorcycle")
                 labels.get(i - 10).setIcon(new javax.swing.ImageIcon(rr.motorcycleImage));
         }
+        
+        // Set the icon for the frame
+        setIconImage(new ImageIcon(System.getProperty("user.dir") + "/resources/logo.png").getImage());
     }
 
     @SuppressWarnings("unchecked")

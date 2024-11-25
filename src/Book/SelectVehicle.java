@@ -1,5 +1,6 @@
 package Book;
 import Menu.Menu;
+import javax.swing.ImageIcon;
 
 public class SelectVehicle extends javax.swing.JFrame {
 
@@ -9,6 +10,9 @@ public class SelectVehicle extends javax.swing.JFrame {
     public SelectVehicle() {
         setUndecorated(true);
         initComponents();
+        
+        // Set the icon for the frame
+        setIconImage(new ImageIcon(System.getProperty("user.dir") + "/resources/logo.png").getImage());
     }
     
     @SuppressWarnings("unchecked")

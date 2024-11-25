@@ -1,17 +1,12 @@
 package Book;
 
 import Menu.Menu;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class BookingPayment extends javax.swing.JFrame {
@@ -20,6 +15,9 @@ public class BookingPayment extends javax.swing.JFrame {
         setUndecorated(true);
         initComponents();
         date.setText(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        
+        // Set the icon for the frame
+        setIconImage(new ImageIcon(System.getProperty("user.dir") + "/resources/logo.png").getImage());
     }
 
     @SuppressWarnings("unchecked")
@@ -141,7 +139,11 @@ public class BookingPayment extends javax.swing.JFrame {
                         + "To: " + endtimedata + "\n"
                         + "Space Number: " + spacenumber.getText() + "\n"
                         + "Total Price: " + totalprice + "\n"
-                        + "Payment Status: Paid\n";
+                        + "Payment Status: Paid\n"
+                        + "In the Space: false\n"
+                        + "Vehicle Type: " + vehicletype.getText() + "\n"
+                        + "Left Early: false\n"
+                        + "---------------------";
             try {
                 FileWriter fw = new FileWriter(System.getProperty("user.dir") + "/src/Data/ParkingHistory.txt", true);
                 fw.write(data + "\n"); // Add a new line after the text
@@ -149,43 +151,8 @@ public class BookingPayment extends javax.swing.JFrame {
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
-            
-            // Initialize GarageData.txt as array
-            File file = new File(System.getProperty("user.dir") + "/src/Data/GarageData.txt");
-            List<String> lines = new ArrayList<>();
-
-            int targetLine = Integer.parseInt(spacenumber.getText());
-            
-            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-                String line;
-                // currentLine is based on .txt file length
-                for(int currentLine = 0; currentLine < 46; currentLine++){
-                    line = reader.readLine();
-                    if(currentLine == targetLine + 1 && line.trim().equals("Free")){
-                        lines.add("Booked");
-                    } else if(currentLine == targetLine + 24 && line.trim().equals("Free")){
-                        lines.add(vehicletype.getText());
-                    }
-                    else {
-                        lines.add(line);
-                    }
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            
             JOptionPane.showMessageDialog(this, "Payment Successful. Space is Booked. Your change is " + (customeramount - totalprice) + ".00 PHP", "Success", JOptionPane.INFORMATION_MESSAGE);
 
-            // Write GarageData.txt
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
-                for (String line : lines) {
-                    writer.write(line);
-                    writer.newLine();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            
             Menu m = new Menu();
             m.setLocationRelativeTo(null);
             m.setResizable(false);
