@@ -15,6 +15,9 @@ public class SelectSpace extends javax.swing.JFrame {
     public SelectSpace() {
         setUndecorated(true);
         initComponents();
+        
+        // Set the icon for the frame
+        setIconImage(new ImageIcon(System.getProperty("user.dir") + "/resources/logo.png").getImage());
     }
 
     @SuppressWarnings("unchecked")

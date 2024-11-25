@@ -31,7 +31,7 @@ public class Booking extends javax.swing.JFrame {
     String currentdate = bd.RetrieveDateTime("Date");
     
     // Initialize Booking Times
-    float starthour ;
+    float starthour;
     float startminute; 
     float endhour;
     float endminute; 
@@ -39,16 +39,19 @@ public class Booking extends javax.swing.JFrame {
     // Function Call for Booking Time
     
     public void initializeBookingTimeValue(){
-        this.starthour = Float.parseFloat(fromHour.getText());
-        this.startminute = Float.parseFloat(fromMinute.getText()) * 0.01f; // Convert minutes to decimals
-        this.endhour = Float.parseFloat(toHour.getText());
-        this.endminute = Float.parseFloat(toMinute.getText()) * 0.01f; // Convert minutes to decimals
+        this.starthour = Float.parseFloat(fromHourComboBox.getSelectedItem().toString());
+        this.startminute = Float.parseFloat(fromMinuteComboBox.getSelectedItem().toString()) * 0.01f; // Convert minutes to decimals
+        this.endhour = Float.parseFloat(toHourComboBox.getSelectedItem().toString());
+        this.endminute = Float.parseFloat(toMinuteComboBox.getSelectedItem().toString()) * 0.01f; // Convert minutes to decimals
     }
 
     public Booking() {
         setUndecorated(true);
         initComponents();
         date.setText(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        
+        // Set the icon for the frame
+        setIconImage(new ImageIcon(System.getProperty("user.dir") + "/resources/logo.png").getImage());
     }
 
     @SuppressWarnings("unchecked")
@@ -56,13 +59,13 @@ public class Booking extends javax.swing.JFrame {
     private void initComponents() {
 
         spaceNumber = new javax.swing.JComboBox<>();
-        toMinute = new javax.swing.JTextField();
-        toHour = new javax.swing.JTextField();
-        fromMinute = new javax.swing.JTextField();
-        fromHour = new javax.swing.JTextField();
         name = new javax.swing.JTextField();
         toComboBox = new javax.swing.JComboBox<>();
         fromComboBox = new javax.swing.JComboBox<>();
+        toMinuteComboBox = new javax.swing.JComboBox<>();
+        toHourComboBox = new javax.swing.JComboBox<>();
+        fromMinuteComboBox = new javax.swing.JComboBox<>();
+        fromHourComboBox = new javax.swing.JComboBox<>();
         total = new javax.swing.JLabel();
         date = new javax.swing.JLabel();
         vehicleType = new javax.swing.JLabel();
@@ -77,62 +80,6 @@ public class Booking extends javax.swing.JFrame {
         spaceNumber.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Space 1", "Space 2", "Space 3", "Space 4", "Space 5", "Space 6", "Space 7", "Space 8", "Space 9", "Space 10", "Space 11", "Space 12", "Space 13", "Space 14", "Space 15", "Space 16", "Space 17", "Space 18", "Space 19", "Space 20" }));
         getContentPane().add(spaceNumber, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 330, -1, -1));
 
-        toMinute.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
-        toMinute.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        toMinute.setText("59");
-        toMinute.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        toMinute.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                toMinuteKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                toMinuteKeyTyped(evt);
-            }
-        });
-        getContentPane().add(toMinute, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 295, 30, -1));
-
-        toHour.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
-        toHour.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        toHour.setText("11");
-        toHour.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        toHour.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                toHourKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                toHourKeyTyped(evt);
-            }
-        });
-        getContentPane().add(toHour, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 295, 30, -1));
-
-        fromMinute.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
-        fromMinute.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        fromMinute.setText("00");
-        fromMinute.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        fromMinute.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                fromMinuteKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                fromMinuteKeyTyped(evt);
-            }
-        });
-        getContentPane().add(fromMinute, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 255, 30, -1));
-
-        fromHour.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
-        fromHour.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        fromHour.setText("12");
-        fromHour.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        fromHour.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                fromHourKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                fromHourKeyTyped(evt);
-            }
-        });
-        getContentPane().add(fromHour, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 255, 30, -1));
-
         name.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
         name.setBorder(null);
         name.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -143,12 +90,13 @@ public class Booking extends javax.swing.JFrame {
         getContentPane().add(name, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 200, -1));
 
         toComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM" }));
+        toComboBox.setSelectedIndex(1);
         toComboBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 toComboBoxItemStateChanged(evt);
             }
         });
-        getContentPane().add(toComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 295, -1, -1));
+        getContentPane().add(toComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 295, -1, -1));
 
         fromComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "AM", "PM" }));
         fromComboBox.addItemListener(new java.awt.event.ItemListener() {
@@ -156,7 +104,41 @@ public class Booking extends javax.swing.JFrame {
                 fromComboBoxItemStateChanged(evt);
             }
         });
-        getContentPane().add(fromComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 255, -1, -1));
+        getContentPane().add(fromComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 255, -1, -1));
+
+        toMinuteComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
+        toMinuteComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                toMinuteComboBoxItemStateChanged(evt);
+            }
+        });
+        getContentPane().add(toMinuteComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 295, 50, -1));
+
+        toHourComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        toHourComboBox.setSelectedIndex(11);
+        toHourComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                toHourComboBoxItemStateChanged(evt);
+            }
+        });
+        getContentPane().add(toHourComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 295, 50, -1));
+
+        fromMinuteComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" }));
+        fromMinuteComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                fromMinuteComboBoxItemStateChanged(evt);
+            }
+        });
+        getContentPane().add(fromMinuteComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(235, 255, 50, -1));
+
+        fromHourComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        fromHourComboBox.setSelectedIndex(11);
+        fromHourComboBox.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                fromHourComboBoxItemStateChanged(evt);
+            }
+        });
+        getContentPane().add(fromHourComboBox, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 255, 50, -1));
 
         total.setFont(new java.awt.Font("Yu Gothic UI", 0, 14)); // NOI18N
         getContentPane().add(total, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 390, 150, 30));
@@ -214,46 +196,6 @@ public class Booking extends javax.swing.JFrame {
             evt.consume();
     }//GEN-LAST:event_nameKeyTyped
 
-    private void fromHourKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fromHourKeyTyped
-        timeTextFieldValidation(evt, fromHour);
-        price(vehicleType.getText());
-    }//GEN-LAST:event_fromHourKeyTyped
-
-    private void fromMinuteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fromMinuteKeyTyped
-        timeTextFieldValidation(evt, fromMinute);
-        price(vehicleType.getText());
-    }//GEN-LAST:event_fromMinuteKeyTyped
-
-    private void toHourKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_toHourKeyTyped
-        timeTextFieldValidation(evt, toHour);
-        price(vehicleType.getText());
-    }//GEN-LAST:event_toHourKeyTyped
-
-    private void toMinuteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_toMinuteKeyTyped
-        timeTextFieldValidation(evt, toMinute);
-        price(vehicleType.getText());
-    }//GEN-LAST:event_toMinuteKeyTyped
-
-    private void fromHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fromHourKeyPressed
-        timeTextFieldKeyControl(evt, fromHour);
-        price(vehicleType.getText());
-    }//GEN-LAST:event_fromHourKeyPressed
-
-    private void toHourKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_toHourKeyPressed
-        timeTextFieldKeyControl(evt, toHour);
-        price(vehicleType.getText());
-    }//GEN-LAST:event_toHourKeyPressed
-
-    private void fromMinuteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_fromMinuteKeyPressed
-        timeTextFieldKeyControl(evt, fromMinute);
-        price(vehicleType.getText());
-    }//GEN-LAST:event_fromMinuteKeyPressed
-
-    private void toMinuteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_toMinuteKeyPressed
-        timeTextFieldKeyControl(evt, toMinute);
-        price(vehicleType.getText());
-    }//GEN-LAST:event_toMinuteKeyPressed
-
     private void confirmMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_confirmMouseClicked
         initializeBookingTimeValue();
         
@@ -279,11 +221,18 @@ public class Booking extends javax.swing.JFrame {
         if(fromComboBox.getSelectedIndex() == 0 && this.starthour == 12)
             start = 0.00f + this.startminute;
         
+        // If end time is midnight
+        if(!(start >= 0 && end < 1) && end >= 0 && end < 1){
+            JOptionPane.showMessageDialog(this, "Not a valid time, you cannot park overnight", "Warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
         // If end time is less than start time
         if(end < start){
             JOptionPane.showMessageDialog(this, "Not a valid time", "Warning", JOptionPane.WARNING_MESSAGE);
             return;
         }
+        
         // If start time and end time is the same
         if(end == start){
             JOptionPane.showMessageDialog(this, "Not a valid time, you cannot park for a second.", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -296,8 +245,8 @@ public class Booking extends javax.swing.JFrame {
         }
         
         // Changes value of start and end for BookingPayment UI
-        this.start = fromHour.getText() + ":" + fromMinute.getText() + " " + fromComboBox.getSelectedItem().toString();
-        this.end = toHour.getText() + ":" + toMinute.getText() + " " + toComboBox.getSelectedItem().toString();
+        this.start = fromHourComboBox.getSelectedItem().toString() + ":" + fromMinuteComboBox.getSelectedItem().toString() + " " + fromComboBox.getSelectedItem().toString();
+        this.end = toHourComboBox.getSelectedItem().toString() + ":" + toMinuteComboBox.getSelectedItem().toString() + " " + toComboBox.getSelectedItem().toString();
 
         // Checks if space is valid
         String space = spaceNumber.getSelectedItem().toString();
@@ -314,50 +263,40 @@ public class Booking extends javax.swing.JFrame {
         String historyParked = null;
         
         boolean spaceAvailable = true;
-        
         String historyFilePath = System.getProperty("user.dir") + "/src/Data/ParkingHistory.txt";
+        
+        // Read all data from parking history
         try (BufferedReader br = new BufferedReader(new FileReader(historyFilePath))) {
             String line;
-            int lineNumber = 1;
             boolean vehicleParkedinSpace = false;
-            
-            while((line = br.readLine()) != null){
-                // Initialize Values
-                switch(lineNumber){
-                    case 2:
-                        historyDate = line.split(":")[1].trim();
-                        break;
-                    case 3:
-                        historyStartTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
-                        break;
-                    case 4:
-                        historyEndTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
-                        break;
-                    case 5:
-                        historySpaceNumber = line.split(":")[1].trim();
-                        break;
-                    case 8:
-                        historyParked = line.split(":")[1].trim();
-                        break;
-                    case 10:
-                        lineNumber = 0;
-                }
-                
-                if(lineNumber == 0)
-                    vehicleParkedinSpace = checkHistory(historyDate, historyStartTime, historyEndTime, historySpaceNumber, historyParked);
-                
-                if(vehicleParkedinSpace){
-                    spaceAvailable = false;
-                    break;
-                }
 
-                lineNumber++;
+            while ((line = br.readLine()) != null) {
+                if (line.startsWith("Date: ")) {
+                    historyDate = line.split(":")[1].trim();
+                } else if (line.startsWith("From: ")) {
+                    historyStartTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
+                }
+                else if (line.startsWith("To: ")) {
+                    historyEndTime = line.split(":")[1].trim() + ":" + line.split(":")[2].trim();
+                }
+                else if(line.startsWith("Space Number: ")){
+                    historySpaceNumber = line.split(":")[1].trim();
+                }
+                else if(line.startsWith("In the Space: ")){
+                    historyParked = line.split(":")[1].trim();
+                    vehicleParkedinSpace = checkHistory(historyDate, historyStartTime, historyEndTime, historySpaceNumber, historyParked);
+                    
+                    if(vehicleParkedinSpace){
+                        spaceAvailable = false;
+                        break;
+                    }
+                }
             }
-        } catch (IOException e) {
+        }
+        catch(IOException e){
             e.printStackTrace();
         }
         
-
         // Else, prompt user that space is not available
         if (spaceAvailable) {
             JOptionPane.showMessageDialog(this, "Please proceed to payment for the confirmation of booking.", "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -409,80 +348,27 @@ public class Booking extends javax.swing.JFrame {
         } 
     }//GEN-LAST:event_cancelMouseClicked
 
+    private void fromMinuteComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fromMinuteComboBoxItemStateChanged
+        if (evt.getStateChange() == evt.SELECTED)
+             price(vehicleType.getText());
+    }//GEN-LAST:event_fromMinuteComboBoxItemStateChanged
+
+    private void fromHourComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_fromHourComboBoxItemStateChanged
+        if (evt.getStateChange() == evt.SELECTED)
+             price(vehicleType.getText());
+    }//GEN-LAST:event_fromHourComboBoxItemStateChanged
+
+    private void toHourComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_toHourComboBoxItemStateChanged
+        if (evt.getStateChange() == evt.SELECTED)
+             price(vehicleType.getText());
+    }//GEN-LAST:event_toHourComboBoxItemStateChanged
+
+    private void toMinuteComboBoxItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_toMinuteComboBoxItemStateChanged
+        if (evt.getStateChange() == evt.SELECTED)
+             price(vehicleType.getText());
+    }//GEN-LAST:event_toMinuteComboBoxItemStateChanged
+
     // User Defined Functions
-    
-    // Error Trap Inputs
-    
-    private void timeTextFieldKeyControl(KeyEvent evt, JTextField textfield){
-        try{
-            int textfieldReader = Integer.parseInt(textfield.getText());
-            
-            // Down Button is pressed
-            if (evt.getKeyCode() == KeyEvent.VK_DOWN){
-                if((textfield == fromHour || textfield == toHour) && textfieldReader > 1)
-                    textfield.setText(String.valueOf(--textfieldReader));
-                
-                if((textfield == fromMinute || textfield == toMinute) && textfieldReader > 0)
-                    textfield.setText(String.valueOf(--textfieldReader));
-            }
-            // Up Button is pressed
-            else if(evt.getKeyCode() == KeyEvent.VK_UP){
-                if((textfield == fromHour || textfield == toHour) && textfieldReader < 12){
-                    textfield.setText(String.valueOf(++textfieldReader));
-                }
-                
-                if((textfield == fromMinute || textfield == toMinute) && textfieldReader < 59)
-                    textfield.setText(String.valueOf(++textfieldReader));
-                    
-                // Not to exceed 11:59PM
-                if(textfield == toHour && textfieldReader == 12 && toComboBox.getSelectedItem().toString() == "AM"){
-                    toComboBox.setSelectedIndex(1);
-                }
-            }
-        }
-        catch(NumberFormatException e){
-            System.out.println("Number Format Exception");
-        }
-    }
-    
-    private void timeTextFieldValidation(KeyEvent evt, JTextField textfield){
-        // Retrieves the responsible textfield for character count
-
-        char keyChar = evt.getKeyChar();
-        boolean isDigit = Character.isDigit(keyChar);
-        int characterCount = textfield.getText().length();
-
-        if (!isDigit || characterCount >= 2) 
-            evt.consume();
-
-
-        // Reads textfield from their specific limits
-        try {
-            int textfieldReader = Integer.parseInt(textfield.getText() + evt.getKeyChar());
-            
-            if (characterCount > 0) {
-                if (textfield == fromMinute || textfield == toMinute)
-                    if (textfieldReader < 0 || textfieldReader > 59){
-                        textfield.setText("00");
-                        evt.consume();
-                    }
-                
-                if (textfield == fromHour)
-                    if (textfieldReader < 1 || textfieldReader > 12){
-                        textfield.setText("01");
-                        evt.consume();
-                    }
-                
-                if (textfield == toHour)
-                    if (textfieldReader < 1 || textfieldReader > 11){
-                        textfield.setText("01");
-                        evt.consume();
-                    } 
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("Number Format Exception");
-        }
-    }
     
     public void price(String vehicletype){
         int perhour;
@@ -503,6 +389,8 @@ public class Booking extends javax.swing.JFrame {
         // Checks time is 12 AM
         if(fromComboBox.getSelectedIndex() == 0 && this.starthour == 12)
             start = 0.00f + this.startminute;
+        if(toComboBox.getSelectedIndex() == 0 && this.endhour == 12)
+            end = 0.00f + this.startminute;
         
         if(end < start){
             JOptionPane.showMessageDialog(this, "Not a valid time", "Warning", JOptionPane.WARNING_MESSAGE);
@@ -521,10 +409,10 @@ public class Booking extends javax.swing.JFrame {
             price = perhour;
         
         // TESTING PURPOSES
-//        System.out.println("START: " + (int) start);
-//        System.out.println("END: " + (int) end);
-//        System.out.println("FORMULA: " + ((int) end - (int) start));
-//        System.out.println("PER HOUR: " + perhour +"\n");
+        System.out.println("START: " + (int) start);
+        System.out.println("END: " + (int) end);
+        System.out.println("FORMULA: " + ((int) end - (int) start));
+        System.out.println("PER HOUR: " + perhour +"\n");
 
         total.setText(price + ".00 PHP");
     }
@@ -583,13 +471,13 @@ public class Booking extends javax.swing.JFrame {
     private javax.swing.JLabel confirm;
     private javax.swing.JLabel date;
     private javax.swing.JComboBox<String> fromComboBox;
-    private javax.swing.JTextField fromHour;
-    private javax.swing.JTextField fromMinute;
+    private javax.swing.JComboBox<String> fromHourComboBox;
+    private javax.swing.JComboBox<String> fromMinuteComboBox;
     private javax.swing.JTextField name;
     private javax.swing.JComboBox<String> spaceNumber;
     private javax.swing.JComboBox<String> toComboBox;
-    private javax.swing.JTextField toHour;
-    private javax.swing.JTextField toMinute;
+    private javax.swing.JComboBox<String> toHourComboBox;
+    private javax.swing.JComboBox<String> toMinuteComboBox;
     public javax.swing.JLabel total;
     public javax.swing.JLabel vehicleType;
     // End of variables declaration//GEN-END:variables

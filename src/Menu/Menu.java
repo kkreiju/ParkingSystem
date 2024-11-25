@@ -3,8 +3,11 @@ import Book.Booking;
 import ParkingLot.Garage1;
 import ParkingLot.BookedData;
 import Book.SelectVehicle;
+import java.awt.Image;
+import java.awt.Toolkit;
 import java.io.*;
 import java.util.*;
+import javax.swing.ImageIcon;
 
 public class Menu extends javax.swing.JFrame {
     BookedData bd = new BookedData();
@@ -68,6 +71,9 @@ public class Menu extends javax.swing.JFrame {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        // Set the icon for the frame
+        setIconImage(new ImageIcon(System.getProperty("user.dir") + "/resources/logo.png").getImage());
     }
     
     // User Defined Functions

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 public class BookingPayment extends javax.swing.JFrame {
@@ -14,6 +15,9 @@ public class BookingPayment extends javax.swing.JFrame {
         setUndecorated(true);
         initComponents();
         date.setText(ZonedDateTime.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("MM/dd/yyyy")));
+        
+        // Set the icon for the frame
+        setIconImage(new ImageIcon(System.getProperty("user.dir") + "/resources/logo.png").getImage());
     }
 
     @SuppressWarnings("unchecked")
@@ -138,6 +142,7 @@ public class BookingPayment extends javax.swing.JFrame {
                         + "Payment Status: Paid\n"
                         + "In the Space: false\n"
                         + "Vehicle Type: " + vehicletype.getText() + "\n"
+                        + "Left Early: false"
                         + "---------------------";
             try {
                 FileWriter fw = new FileWriter(System.getProperty("user.dir") + "/src/Data/ParkingHistory.txt", true);

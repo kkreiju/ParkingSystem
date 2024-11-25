@@ -1,12 +1,17 @@
 package Menu;
 
 import Leave.SelectSpace;
+import ParkingLot.History;
+import javax.swing.ImageIcon;
 
 public class Menu2 extends javax.swing.JFrame {
 
     public Menu2() {
         setUndecorated(true);
         initComponents();
+        
+        // Set the icon for the frame
+        setIconImage(new ImageIcon(System.getProperty("user.dir") + "/resources/logo.png").getImage());
     }
 
     @SuppressWarnings("unchecked")
@@ -31,6 +36,12 @@ public class Menu2 extends javax.swing.JFrame {
             }
         });
         getContentPane().add(leave, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 190, 300, 80));
+
+        viewParkingHistory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                viewParkingHistoryMouseClicked(evt);
+            }
+        });
         getContentPane().add(viewParkingHistory, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 290, 300, 80));
 
         back.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -61,6 +72,14 @@ public class Menu2 extends javax.swing.JFrame {
         ss.setVisible(true);
         dispose();
     }//GEN-LAST:event_leaveMouseClicked
+
+    private void viewParkingHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_viewParkingHistoryMouseClicked
+        History h = new History();
+        h.setLocationRelativeTo(null);
+        h.setResizable(false);
+        h.setVisible(true);
+        dispose();
+    }//GEN-LAST:event_viewParkingHistoryMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel back;
